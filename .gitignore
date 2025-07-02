@@ -1,0 +1,4 @@
+node_modules
+/dist
+kendo-vue-app/node_modules
+kendo-vue-app/dist
