@@ -2,12 +2,14 @@
 import { ref, computed, h } from 'vue'
 import { useRouter } from 'vue-router'
 import { Grid } from '@progress/kendo-vue-grid'
+
 import { Button } from '@progress/kendo-vue-buttons'
 import { users, deleteUsers } from '../store'
 
 const router = useRouter()
 const filterName = ref('')
 const selectedField = 'selected'
+
 
 // Grid column definitions with custom edit cell
 const columns = [
@@ -32,6 +34,7 @@ const columns = [
       )
   }
 ]
+
 
 // Computes the data displayed in the grid applying the filter
 const gridData = computed(() => {
