@@ -1,13 +1,40 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, h } from 'vue'
 import { useRouter } from 'vue-router'
-import { Grid, GridColumn } from '@progress/kendo-vue-grid'
+import { Grid } from '@progress/kendo-vue-grid'
+
 import { Button } from '@progress/kendo-vue-buttons'
 import { users, deleteUsers } from '../store'
 
 const router = useRouter()
 const filterName = ref('')
 const selectedField = 'selected'
+
+
+// Grid column definitions with custom edit cell
+const columns = [
+  { field: 'id', title: 'ID', width: 50 },
+  { field: 'name', title: 'Nome' },
+  { field: 'email', title: 'Email' },
+  {
+    field: 'edit',
+    title: 'Editar',
+    width: 100,
+    cell: (h, _, props) =>
+      h(
+        'a',
+        {
+          href: '#',
+          onClick: (e) => {
+            e.preventDefault()
+            router.push(`/users/${props.dataItem.id}`)
+          }
+        },
+        'Editar'
+      )
+  }
+]
+
 
 // Computes the data displayed in the grid applying the filter
 const gridData = computed(() => {
@@ -35,25 +62,13 @@ function removeSelected() {
       <Button @click="() => router.push('/users/new')">Novo</Button>
     </div>
     <Grid
-      :style="{height: '400px'}"
+      :style="{ height: '400px' }"
       :data-items="gridData"
+      :columns="columns"
       :selectable="{ enabled: true, mode: 'multiple', checkboxOnly: true }"
       :selected-field="selectedField"
       @selectionchange="onSelectionChange"
-    >
-      <GridColumn field="id" title="ID" width="50" />
-      <GridColumn field="name" title="Nome" />
-      <GridColumn field="email" title="Email" />
-      <GridColumn
-        field="edit"
-        :width="100"
-        title="Editar"
-      >
-        <template #cell="{ dataItem }">
-          <a @click.prevent="router.push(`/users/${dataItem.id}`)">Editar</a>
-        </template>
-      </GridColumn>
-    </Grid>
+    />
   </div>
 </template>
 
